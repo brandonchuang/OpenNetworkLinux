@@ -10,6 +10,7 @@ class OnlPlatform_x86_64_accton_as7926_40xfb_r0(OnlPlatformAccton,
 
     def baseconfig(self):
         self.insmod('optoe')
+        self.insmod('x86-64-accton-as7926-40xfb-cpld')
 
         ########### initialize I2C bus 0 ###########
         self.new_i2c_devices([
@@ -33,9 +34,14 @@ class OnlPlatform_x86_64_accton_as7926_40xfb_r0(OnlPlatformAccton,
                 ('pca9548', 0x74, 73), # i2c 81-88
                 ('pca9548', 0x74, 74), # i2c 89-96
 
+                #initiate CPLD
+                ('as7926_40xfb_cpld2', 0x62, 12),
+                ('as7926_40xfb_cpld3', 0x63, 13),
+                ('as7926_40xfb_cpld4', 0x64, 76),
+
                 ('24c02', 0x57, 0),
                 ])
-        
+
         # initialize QSFP port(0-39), FAB port(40-52)
         port_i2c_bus = [33, 34, 37, 38, 41, 42, 45, 46, 49, 50,
                         53, 54, 57, 58, 61, 62, 65, 66, 69, 70,
@@ -47,7 +53,7 @@ class OnlPlatform_x86_64_accton_as7926_40xfb_r0(OnlPlatformAccton,
         for port in range(0, 53):
             self.new_i2c_device('optoe1', 0x50, port_i2c_bus[port])
             subprocess.call('echo port%d > /sys/bus/i2c/devices/%d-0050/port_name' % (port, port_i2c_bus[port]), shell=True)
-        
+
         # initialize SFP port 53-54
         self.new_i2c_device('optoe2', 0x50, 30)
         subprocess.call('echo port53 > /sys/bus/i2c/devices/30-0050/port_name', shell=True)
