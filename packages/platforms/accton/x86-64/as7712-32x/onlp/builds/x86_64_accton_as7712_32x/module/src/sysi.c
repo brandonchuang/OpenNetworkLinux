@@ -136,10 +136,10 @@ typedef struct fan_ctrl_policy {
 } fan_ctrl_policy_t;
 
 fan_ctrl_policy_t  fan_ctrl_policy_f2b[] = {
-{32,      0, 174000},
-{38, 170000, 182000},
-{50, 178000, 190000},
-{63, 186000,      0}
+{32,      0, 140000},
+{38, 135000, 150000},
+{50, 145000, 160000},
+{69, 155000,      0}
 };
 
 fan_ctrl_policy_t  fan_ctrl_policy_b2f[] = {
@@ -155,14 +155,14 @@ fan_ctrl_policy_t  fan_ctrl_policy_b2f[] = {
 /*
  * For AC power Front to Back :
  *	* If any fan fail, please fan speed register to 15
- *	* The max value of Fan speed register is 9
- *		[LM75(48) + LM75(49) + LM75(4A)] > 174  => set Fan speed value from 4 to 5
- *		[LM75(48) + LM75(49) + LM75(4A)] > 182  => set Fan speed value from 5 to 7
- *		[LM75(48) + LM75(49) + LM75(4A)] > 190  => set Fan speed value from 7 to 9
+ *	* The max value of Fan speed register is 10
+ *		[LM75(48) + LM75(49) + LM75(4A)] > 140  => set Fan speed value from 4 to 5
+ *		[LM75(48) + LM75(49) + LM75(4A)] > 150  => set Fan speed value from 5 to 7
+ *		[LM75(48) + LM75(49) + LM75(4A)] > 160  => set Fan speed value from 7 to 10
  *
- *		[LM75(48) + LM75(49) + LM75(4A)] < 170  => set Fan speed value from 5 to 4
- *		[LM75(48) + LM75(49) + LM75(4A)] < 178  => set Fan speed value from 7 to 5
- *		[LM75(48) + LM75(49) + LM75(4A)] < 186  => set Fan speed value from 9 to 7
+ *		[LM75(48) + LM75(49) + LM75(4A)] < 135  => set Fan speed value from 5 to 4
+ *		[LM75(48) + LM75(49) + LM75(4A)] < 145  => set Fan speed value from 7 to 5
+ *		[LM75(48) + LM75(49) + LM75(4A)] < 155  => set Fan speed value from 10 to 7
  *
  *
  * For  AC power Back to Front :
