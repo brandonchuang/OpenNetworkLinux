@@ -615,9 +615,13 @@ static struct i2c_driver ym2651y_driver = {
 static int ym2651y_read_byte(struct i2c_client *client, u8 reg)
 {
     int status = 0, retry = I2C_RW_RETRY_COUNT;
+    struct ym2651y_data *chip_info = i2c_get_clientdata(client);
 
     while (retry) {
         status = i2c_smbus_read_byte_data(client, reg);
+        if (chip_info->chip == YM1921)
+            msleep(25);
+
         if (unlikely(status < 0)) {
             msleep(I2C_RW_RETRY_INTERVAL);
             retry--;
@@ -633,9 +637,13 @@ static int ym2651y_read_byte(struct i2c_client *client, u8 reg)
 static int ym2651y_read_word(struct i2c_client *client, u8 reg)
 {
     int status = 0, retry = I2C_RW_RETRY_COUNT;
+    struct ym2651y_data *chip_info = i2c_get_clientdata(client);
 
     while (retry) {
         status = i2c_smbus_read_word_data(client, reg);
+        if (chip_info->chip == YM1921)
+            msleep(25);
+
         if (unlikely(status < 0)) {
             msleep(I2C_RW_RETRY_INTERVAL);
             retry--;
@@ -651,9 +659,13 @@ static int ym2651y_read_word(struct i2c_client *client, u8 reg)
 static int ym2651y_write_word(struct i2c_client *client, u8 reg, u16 value)
 {
     int status = 0, retry = I2C_RW_RETRY_COUNT;
+    struct ym2651y_data *chip_info = i2c_get_clientdata(client);
 
     while (retry) {
         status = i2c_smbus_write_word_data(client, reg, value);
+        if (chip_info->chip == YM1921)
+            msleep(25);
+
         if (unlikely(status < 0)) {
             msleep(I2C_RW_RETRY_INTERVAL);
             retry--;
@@ -670,9 +682,13 @@ static int ym2651y_read_block(struct i2c_client *client, u8 command, u8 *data,
               int data_len)
 {
     int status = 0, retry = I2C_RW_RETRY_COUNT;
+    struct ym2651y_data *chip_info = i2c_get_clientdata(client);
 
     while (retry) {
         status = i2c_smbus_read_i2c_block_data(client, command, data_len, data);
+        if (chip_info->chip == YM1921)
+            msleep(25);
+
         if (unlikely(status < 0)) {
             msleep(I2C_RW_RETRY_INTERVAL);
             retry--;
