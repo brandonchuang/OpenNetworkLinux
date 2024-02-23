@@ -67,7 +67,7 @@ def init_ipmi():
 
 
 class OnlPlatform_x86_64_accton_as9817_64d_r0(OnlPlatformAccton,
-                                              OnlPlatformPortConfig_2x100_2x400_24x25):
+                                              OnlPlatformPortConfig_64x800_2x25):
     PLATFORM='x86-64-accton-as9817-64d-r0'
     MODEL="AS9817-64D"
     SYS_OBJECT_ID=".9817.64"
@@ -77,8 +77,19 @@ class OnlPlatform_x86_64_accton_as9817_64d_r0(OnlPlatformAccton,
             return False
 
         self.insmod('optoe')
-        for m in [ 'i2c-ocores', 'fpga' ]:
+        for m in [ 'i2c-ocores', 'fpga', 'mux', 'fan', 'psu', 'thermal', 'sys', 'leds' ]:
             self.insmod("x86-64-accton-as9817-64d-%s" % m)
+
+        ########### initialize I2C bus 0 ###########
+        self.new_i2c_devices(
+            [
+                # initialize multiplexer (PCA9548)
+                ('as9817_64d_mux', 0x78, 0),
+
+                # initiate IDPROM
+                ('24c02', 0x56, 67),
+                ]
+            )
 
         # initialize SFP devices
         for port in range(1, 65):
