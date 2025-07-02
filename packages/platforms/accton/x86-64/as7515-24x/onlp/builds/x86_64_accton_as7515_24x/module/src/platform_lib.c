@@ -140,3 +140,40 @@ int fan_info_get(int fid, char *node, int *value)
     *value = 0;
     return onlp_file_read_int(value, FAN_SYSFS_FORMAT, fid, node);
 }
+
+psu_type_t get_psu_type(int id, char* modelname, int modelname_len)
+{
+    int   len = 0;
+    char  *path;
+    char  *str = NULL;
+
+    path = psu_get_pmbus_dir(id);
+    if (path == NULL)
+        return ONLP_STATUS_E_INTERNAL;
+
+    len = onlp_file_read_str(&str, "%s/%s", path, "psu_mfr_model");
+
+    if (!str || len <= 0) {
+        AIM_FREE_IF_PTR(str);
+        return PSU_TYPE_UNKNOWN;
+    }
+
+    if (!strncmp(str, "SPAACTN-03", strlen("SPAACTN-03")))
+    {
+        if (modelname)
+            aim_strlcpy(modelname, str, strlen("SPAACTN-03")<(modelname_len-1)?(strlen("SPAACTN-03")+1):(modelname_len-1));
+            AIM_FREE_IF_PTR(str);
+        return PSU_TYPE_SPAACTN_03;
+    }
+
+    if (!strncmp(str, "CRXT-T0T12", strlen("CRXT-T0T12")))
+    {
+        if (modelname)
+            aim_strlcpy(modelname, str, strlen("CRXT-T0T12")<(modelname_len-1)?(strlen("CRXT-T0T12")+1):(modelname_len-1));
+            AIM_FREE_IF_PTR(str);
+        return PSU_TYPE_CRXT_T0T12;
+    }
+
+    AIM_FREE_IF_PTR(str);
+    return PSU_TYPE_UNKNOWN;
+}

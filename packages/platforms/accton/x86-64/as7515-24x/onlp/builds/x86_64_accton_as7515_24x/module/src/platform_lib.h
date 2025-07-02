@@ -37,6 +37,9 @@
 #define PSU1_ID 1
 #define PSU2_ID 2
 
+#define PSU_STATUS_PRESENT 1
+#define PSU_STATUS_POWER_GOOD 1
+
 #define PSU1_EEPROM_SYSFS_FORMAT "/sys/bus/i2c/devices/6-0052"
 #define PSU2_EEPROM_SYSFS_FORMAT "/sys/bus/i2c/devices/7-0050"
 #define PSU1_PMBUS_SYSFS_FORMAT "/sys/bus/i2c/devices/6-005a"
@@ -71,12 +74,19 @@ enum onlp_led_id {
     LED_FAN
 };
 
+typedef enum psu_type {
+    PSU_TYPE_UNKNOWN,
+    PSU_TYPE_SPAACTN_03,
+    PSU_TYPE_CRXT_T0T12
+} psu_type_t;
+
 int psu_cpld_status_get(int pid, char *node, int *value);
 int psu_pmbus_info_get(int id, char *node, int *value);
 int psu_eeprom_str_get(int pid, char *data_buf, int data_len, char *data_name);
 int onlp_get_psu_hwmon_idx(int pid);
 int onlp_get_fan_hwmon_idx(void);
 int fan_info_get(int fid, char *node, int *value);
+psu_type_t get_psu_type(int id, char* modelname, int modelname_len);
 
 #define AIM_FREE_IF_PTR(p) \
     do \
